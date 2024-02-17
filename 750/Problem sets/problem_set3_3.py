@@ -2,14 +2,22 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+# Function to calculate energies for a qubit
+def energies(Ec, Ej, n_g):
+    H = np.zeros((2, 2))
+    H[0, 1] = H[1, 0] = -Ej / 2
+    H[0, 0] = 4 * Ec * (0 - n_g) ** 2
+    H[1, 1] = 4 * Ec * (1 - n_g) ** 2
+    return np.sort(np.linalg.eigvals(H))
+
+
+# Function to compute energy bands
 def compute_energy_bands(n_g_range, EC_EJ_ratio):
     energy_bands = []
     E_C = 1  # Normalize E_C for simplicity, adjust E_J accordingly
 
     for n_g in n_g_range:
         E_J = E_C / EC_EJ_ratio  # Calculate E_J based on the given EC/EJ ratio
-
-        # Construct the 3x3 Hamiltonian matrix for the given n_g
         H = np.array(
             [
                 [4 * E_C * (-1 - n_g) ** 2, -E_J / 2, 0],
@@ -17,25 +25,18 @@ def compute_energy_bands(n_g_range, EC_EJ_ratio):
                 [0, -E_J / 2, 4 * E_C * (1 - n_g) ** 2],
             ]
         )
-
-        # Diagonalize the Hamiltonian to find the eigenvalues (energy levels)
         energies = np.linalg.eigvalsh(H)
-
-        # Append the energy levels
         energy_bands.append(energies)
 
     return np.array(energy_bands)
 
 
-# n_g range from -1 to 1
+# Example: Calculate and plot energy bands
 n_g_range = np.linspace(-1, 1, 200)
-
-# Ratios of EC/EJ to explore
 EC_EJ_ratios = [5, 1, 1 / 5]
 
-# Plotting
+# Plotting energy bands
 fig, axes = plt.subplots(1, 3, figsize=(18, 6))
-
 for idx, ratio in enumerate(EC_EJ_ratios):
     energy_bands = compute_energy_bands(n_g_range, ratio)
     for band in range(3):  # Plot the three lowest bands
