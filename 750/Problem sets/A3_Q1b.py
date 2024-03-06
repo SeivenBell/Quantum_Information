@@ -63,3 +63,23 @@ if stable_a_values:
     print(f"Stable 'a' values range from {min_stable_a} to {max_stable_a}.")
 else:
     print("No stable 'a' values found.")
+
+
+# Given parameters
+q = 1.602e-19  # Charge of the ion in Coulombs
+m = 171 * 1.660539e-27  # Mass of 171Yb+ in kg
+f = 22e6  # Frequency in Hz
+Omega = 2 * np.pi * f  # Angular frequency in rad/s
+d_0 = 2.7e-3  # Assuming distance between the end-cap electrodes is 2.7 mm
+
+# Minimum and maximum stable 'a' values
+a_min = 0.0
+a_max = 0.027
+
+# Calculate U_0 for min and max stable 'a' values
+U_0_min = -a_min * m * Omega**2 * d_0**2 / (4 * q)
+U_0_max = -a_max * m * Omega**2 * d_0**2 / (4 * q)
+
+# Output the results
+print(f"U_0 for minimum stable 'a' value: {U_0_min} V")
+print(f"U_0 for maximum stable 'a' value: {U_0_max} V")
